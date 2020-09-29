@@ -6,18 +6,28 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        navController = findNavController(R.id.nav_host_fragment)
+
+//        val historyBtn = findViewById<Button>(R.id.btnHistory)
+//
+//        historyBtn.setOnClickListener {
+//            navController.navigate(
+//                R.id.action_playFragment_to_historyFragment
+//            )
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -30,8 +40,11 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        navController.navigate(
+            R.id.action_playFragment_to_historyFragment
+        )
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.btnHistory -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
