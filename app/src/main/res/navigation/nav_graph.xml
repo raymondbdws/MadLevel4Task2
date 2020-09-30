@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/playFragment"
-        android:name="com.rayray.madlevel4task2.PlayFragment"
+        android:name="com.rayray.madlevel4task2.ui.PlayFragment"
         android:label="fragment_play"
         tools:layout="@layout/fragment_play" >
         <action
@@ -16,11 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.rayray.madlevel4task2.HistoryFragment"
+        android:name="com.rayray.madlevel4task2.ui.HistoryFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" >
-        <action
-            android:id="@+id/action_historyFragment_to_playFragment"
-            app:destination="@id/playFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_history" />
 </navigation>
