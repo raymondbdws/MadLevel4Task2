@@ -106,7 +106,8 @@
         app:layout_constraintEnd_toStartOf="@+id/ivPaper"
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivPaper" />
+        app:layout_constraintTop_toTopOf="@+id/ivPaper"
+        tools:srcCompat="@drawable/rock" />
 
     <ImageView
         android:id="@+id/ivPaper"

@@ -2,6 +2,7 @@ package com.rayray.madlevel4task2.model
 import androidx.annotation.DrawableRes
 import java.util.*
 
+//TODO int uitleggen
 data class Game (
     @DrawableRes var computer: Int,
     @DrawableRes var user: Int,
