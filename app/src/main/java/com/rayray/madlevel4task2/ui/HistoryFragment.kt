@@ -1,20 +1,25 @@
 package com.rayray.madlevel4task2.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rayray.madlevel4task2.R
 import com.rayray.madlevel4task2.model.Game
-import com.rayray.madlevel4task2.model.GameElementsEnum
-import com.rayray.madlevel4task2.model.GameStatusEnum
+import com.rayray.madlevel4task2.repository.GameRepository
 import kotlinx.android.synthetic.main.fragment_history.*
-import java.time.LocalDateTime
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -23,50 +28,34 @@ class HistoryFragment : Fragment() {
 
     private val historyList = arrayListOf<Game>()
     private val gameAdapter = GameAdapter(historyList)
+    private val mainScope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var gameRepository: GameRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
+        (activity as AppCompatActivity).supportActionBar?.title = "Your game history"
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //todo later verwijderen, demo recycleview
-        historyList.add(
-            Game(
-                GameElementsEnum.ROCK.element,
-                GameElementsEnum.PAPER.element,
-                Date(23),
-                GameStatusEnum.YOU.status
-            )
-        )
-        historyList.add(
-            Game(
-                R.drawable.scissors,
-                R.drawable.rock,
-                Date(23),
-                GameStatusEnum.YOU.status
-            )
-        )
-        historyList.add(
-            Game(
-                R.drawable.scissors,
-                R.drawable.rock,
-                Date(23),
-                GameStatusEnum.YOU.status
-            )
-        )
-        gameAdapter.notifyDataSetChanged()
+        //todo requirecontext uitleg
+        gameRepository = GameRepository(requireContext())
+        getGamesListFromDatabase()
+        initViews()
     }
 
     private fun initViews() {
+
+
         viewManager = LinearLayoutManager(activity)
         rvGameHistory.addItemDecoration(
             DividerItemDecoration(
@@ -79,6 +68,17 @@ class HistoryFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = gameAdapter
+        }
+    }
+
+    private fun getGamesListFromDatabase(){
+        mainScope.launch {
+            val gameList = withContext(Dispatchers.IO){
+                gameRepository.getAllGames()
+            }
+            this@HistoryFragment.historyList.clear()
+            this@HistoryFragment.historyList.addAll(gameList)
+            this@HistoryFragment.gameAdapter.notifyDataSetChanged()
         }
     }
 }
