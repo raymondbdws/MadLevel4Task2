@@ -2,10 +2,8 @@ package com.rayray.madlevel4task2.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,9 +18,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * @author Raymond Chang
+ *
+ * fragment history.
+ *
  */
 class HistoryFragment : Fragment() {
 
@@ -53,9 +53,10 @@ class HistoryFragment : Fragment() {
         initViews()
     }
 
+    /**
+     * Initialize
+     */
     private fun initViews() {
-
-
         viewManager = LinearLayoutManager(activity)
         rvGameHistory.addItemDecoration(
             DividerItemDecoration(
@@ -71,9 +72,12 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun getGamesListFromDatabase(){
+    /**
+     * get all games from database and put it in arraylist
+     */
+    private fun getGamesListFromDatabase() {
         mainScope.launch {
-            val gameList = withContext(Dispatchers.IO){
+            val gameList = withContext(Dispatchers.IO) {
                 gameRepository.getAllGames()
             }
             this@HistoryFragment.historyList.clear()

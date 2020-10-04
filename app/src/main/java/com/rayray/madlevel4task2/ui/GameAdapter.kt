@@ -9,6 +9,12 @@ import com.rayray.madlevel4task2.model.Game
 import kotlinx.android.synthetic.main.item_history.view.*
 import kotlinx.android.synthetic.main.item_history.view.tvGameResult
 
+/**
+ * @author Raymond Chang
+ *
+ * To connect an item to the recyleView
+ */
+
 class GameAdapter(private val games: List<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

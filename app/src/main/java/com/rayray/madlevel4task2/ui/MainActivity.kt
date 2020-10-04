@@ -37,25 +37,46 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Dit is een tijdelijke oplossing, crasht wanneer je vanaf history > home pagina op de backbutton klikt
+     * Verwijdert menu
+     * voegt nieuw menu toe
+     * opent nieuwe fragment
+     */
     override fun onBackPressed() {
+        //delete old menu
         menu.clear()
+
+        //add new menu
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        //display fragment
         navController.navigate(
             R.id.action_historyFragment_to_playFragment
         )
     }
 
+    /**
+     * When item is selected or user pressed a button, then it checks what need to be done.
+     *
+     *
+     * @param item selected item in menu
+     * @return
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (item.itemId == R.id.btnHistory || item.itemId == android.R.id.home) {
+            //Delete old menu
             menu.clear()
 
             navController.navigate(
                 //Back Arrow button
                 if (navController.currentDestination?.id == R.id.historyFragment) {
+                    //add new menu to actionbar
                     menuInflater.inflate(R.menu.menu_main, menu)
+                    //display new fragment
                     R.id.action_historyFragment_to_playFragment
                 } else {
                     //History button
@@ -67,8 +88,9 @@ class MainActivity : AppCompatActivity() {
             //Delete history button
             mainScope.launch {
                 withContext(Dispatchers.IO) {
+                    //Delete history
                     gameRepository.deleteAllGames()
-                    //Kan recycleview niet verversen vanuit MainAcitity >> moet in HistoryFragement
+                    //TODO Kan recycleview niet verversen vanuit MainAcitity >> moet in HistoryFragement
                 }
             }
             Toast.makeText(

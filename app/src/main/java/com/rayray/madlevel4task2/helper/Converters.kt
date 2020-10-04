@@ -6,7 +6,7 @@ import java.util.*
 /**
  * @author Raymond Chang
  *
- *
+ * Storing object references in Room is not possible. But it can when you use Converters
  */
 class Converters {
     @TypeConverter

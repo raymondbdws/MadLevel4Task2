@@ -18,7 +18,9 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * @author Raymond Chang
+ *
+ * Fragment Play
  */
 class PlayFragment : Fragment() {
     private lateinit var gameRepository: GameRepository
@@ -55,6 +57,11 @@ class PlayFragment : Fragment() {
         }
     }
 
+    /**
+     * Use it, to start the game
+     *
+     * @param user users answer
+     */
     fun startGame(user: GameElementsEnum) {
         //computer antwoord bepalen
         val computer = computerAnswer()
@@ -66,13 +73,17 @@ class PlayFragment : Fragment() {
         //opslaan
         //todo mainscope uitleg
         //todo coroutinescope uitleg
+        //To specify where the coroutines should run, Kotlin provides three Dispatchers you can use. The dispatchers being:
+        //Dispatchers.Main: Main thread on Android, interact with the UI and perform light work.
+        //Dispatchers.IO: Optimized for disk and network IO.
+        //Dispatchers.Default: Optimized for CPU intensive work.
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 gameRepository.insertGame(
                     Game(
                         computer.element,
                         user.element,
-                        Date(3102020),
+                        Date(),
                         getWinner(computer, user)
                     )
                 )
@@ -80,17 +91,30 @@ class PlayFragment : Fragment() {
         }
     }
 
+    /**
+     * generate computers answer
+     */
     fun computerAnswer(): GameElementsEnum {
         return GameElementsEnum.values().toList().shuffled().get(0)
     }
 
+    /**
+     * Goes through the if statement to determine the winner and loser and it will display
+     * the winner or draw on the screen
+     *
+     * @param return strings
+     */
     private fun getWinner(computer: GameElementsEnum, user: GameElementsEnum): String {
 
         if (
-            computer.equals(GameElementsEnum.ROCK) && user.equals(GameElementsEnum.SCISSER) ||
-            computer.equals(GameElementsEnum.PAPER) && user.equals(GameElementsEnum.ROCK) ||
-            computer.equals(GameElementsEnum.SCISSER) && user.equals(GameElementsEnum.PAPER)
+        //checks if computer wins
+
+            computer == GameElementsEnum.ROCK && user == GameElementsEnum.SCISSER ||
+            computer == GameElementsEnum.PAPER && user == GameElementsEnum.ROCK ||
+            computer == GameElementsEnum.SCISSER && user == GameElementsEnum.PAPER
         ) {
+            //if true, then do this
+
             mainScope.launch {
                 withContext(Dispatchers.Main) {
                     tvWinner.setText(R.string.computerWins)
@@ -99,10 +123,14 @@ class PlayFragment : Fragment() {
 
             return "Computer wins!"
         } else if (
-            computer.equals(GameElementsEnum.ROCK) && user.equals(GameElementsEnum.PAPER) ||
-            computer.equals(GameElementsEnum.PAPER) && user.equals(GameElementsEnum.SCISSER) ||
-            computer.equals(GameElementsEnum.SCISSER) && user.equals(GameElementsEnum.ROCK)
+        //checks of user win
+
+            computer == GameElementsEnum.ROCK && user == GameElementsEnum.PAPER ||
+            computer == GameElementsEnum.PAPER && user == GameElementsEnum.SCISSER ||
+            computer == GameElementsEnum.SCISSER && user == GameElementsEnum.ROCK
         ) {
+            //if true, then do this
+
             mainScope.launch {
                 withContext(Dispatchers.Main) {
                     tvWinner.setText(R.string.youWins)
@@ -110,6 +138,8 @@ class PlayFragment : Fragment() {
             }
             return "You win!"
         } else {
+            //otherwise it is a draw
+
             mainScope.launch {
                 withContext(Dispatchers.Main) {
                     tvWinner.setText(R.string.draw)
@@ -118,5 +148,4 @@ class PlayFragment : Fragment() {
             return "Draw"
         }
     }
-
 }
